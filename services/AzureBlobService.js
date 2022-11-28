@@ -29,7 +29,7 @@ upload = async (file) => {
     }
 };
 
-destory = async (name) => {
+destroy = async (name) => {
     console.log(name);
     try {
         const options = { deleteSnapshots: 'include' };
@@ -43,4 +43,4 @@ destory = async (name) => {
     }
 };
 
-module.exports = { init, upload, destory }
+module.exports = { init, upload, destroy }

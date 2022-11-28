@@ -117,7 +117,7 @@ deleting = async (req, res) => {
         });
 
         // delete image from Azure
-        const imageDeleted = await AzureBlobService.destory(imageName);
+        const imageDeleted = await AzureBlobService.destroy(imageName);
 
         if (deleted == 0 || !imageDeleted) {
             throw new Error("An error has occurred whilst deleting the tool with an ID of " + id);
@@ -158,7 +158,7 @@ update = async (req, res) => {
 
         // Delete old image
         let oldImageName = oldTool.image.toString("utf8");
-        const deleted = await AzureBlobService.destory(oldImageName);
+        const deleted = await AzureBlobService.destroy(oldImageName);
 
         if (!deleted) {
             throw new Error("Tool image could not be deleted");
