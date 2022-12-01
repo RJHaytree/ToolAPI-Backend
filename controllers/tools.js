@@ -148,14 +148,15 @@ update = async (req, res) => {
         }
 
         // Retrieve record from DB
-        const oldTool = await Tool.findByPk(id);
+        let oldTool = await Tool.findByPk(id);
 
-        if (!tool) {
+        if (!oldTool) {
             throw new Error("ID cannot be found");
         }
 
         // Delete old image
         let oldImageName = oldTool.image.toString("utf8");
+        console.log(oldImageName);
         const deleted = await azureBlobService.destroy(oldImageName);
 
         if (!deleted) {
@@ -163,19 +164,15 @@ update = async (req, res) => {
         }
 
         // Upload new image
-        tool.image = await AzureBlobService.upload(req.file);
+        oldTool.image = await azureBlobService.upload(req.file);
 
-        tool.description = newTool.description;
-        tool.hire_price = newTool.hire_price;
-        tool.tool_category_id = newTool.tool_category_id;
+        oldTool.description = tool.description;
+        oldTool.hire_price = tool.hire_price;
+        oldTool.tool_category_id = tool.tool_category_id;
 
-        await Tool.update(tool, {
-            where: {
-                id: id
-            }
-        });
+        await oldTool.save();
 
-        res.status(200).json(tool);
+        res.status(200).json(oldTool);
     }
     catch (error) {
         utilities.formatErrorResponse(res, 400, error.message);
