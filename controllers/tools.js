@@ -1,9 +1,8 @@
 const utilities = require('../utilities/utility');
 const db = require('../models');
-const path = require('path');
 const Tool = db.tool;
 const ToolCategory = db.toolCategory;
-const AzureBlobService = require('../services/AzureBlobService');
+const azureBlobService = require('../services/azureBlobService');
 
 getAll = async (req, res) => {
     const tool = await Tool.findAll({
@@ -83,10 +82,9 @@ create = async (req, res) => {
             throw new Error("Essential fields missing");
         }
 
-        tool.image = await AzureBlobService.upload(req.file);
+        tool.image = await azureBlobService.upload(req.file);
         await Tool.create(tool);
 
-        console.log(tool);
         res.status(201).json(tool);
     }
     catch (error) {
@@ -117,7 +115,7 @@ deleting = async (req, res) => {
         });
 
         // delete image from Azure
-        const imageDeleted = await AzureBlobService.destroy(imageName);
+        const imageDeleted = await azureBlobService.destroy(imageName);
 
         if (deleted == 0 || !imageDeleted) {
             throw new Error("An error has occurred whilst deleting the tool with an ID of " + id);
@@ -158,7 +156,7 @@ update = async (req, res) => {
 
         // Delete old image
         let oldImageName = oldTool.image.toString("utf8");
-        const deleted = await AzureBlobService.destroy(oldImageName);
+        const deleted = await azureBlobService.destroy(oldImageName);
 
         if (!deleted) {
             throw new Error("Tool image could not be deleted");

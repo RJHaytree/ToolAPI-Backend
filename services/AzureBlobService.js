@@ -6,7 +6,7 @@ let accountName, blobServiceClient, containerName, containerClient;
 init = () => {
     accountName = 'toolapistorage';
     blobServiceClient = new BlobServiceClient(`https://${accountName}.blob.core.windows.net`, new DefaultAzureCredential());
-    containerName = 'tool-images';
+    containerName = 'images';
     containerClient = blobServiceClient.getContainerClient(containerName);
 };
 
@@ -30,7 +30,6 @@ upload = async (file) => {
 };
 
 destroy = async (name) => {
-    console.log(name);
     try {
         const options = { deleteSnapshots: 'include' };
         const blockBlobClient = containerClient.getBlockBlobClient(name);

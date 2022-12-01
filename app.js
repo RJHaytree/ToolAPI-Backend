@@ -5,16 +5,13 @@ const toolCategoryRouter = require('./routes/toolCategory');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
 const cors = require('cors');
-const AzureBlobService = require('./services/AzureBlobService');
+const azureBlobService = require('./services/azureBlobService');
 
 const app = express();
 app.use(express.json());
 app.use(logger('dev'));
 app.use(cors());
-AzureBlobService.init();
-
-// create a static directory called 'public' where we will upload images
-app.use("/public", express.static(__dirname + "/public"));
+azureBlobService.init();
 
 const swaggerDefinition = {
     info: {
